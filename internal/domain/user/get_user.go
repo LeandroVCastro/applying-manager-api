@@ -1,5 +1,15 @@
-package userdomain
+package user_domain
 
-func GetUser() string {
-	return "User getting"
+type getUser struct {
+	Name string
+}
+
+func (u getUser) Handle() string {
+	return u.Name
+}
+
+func GetUserFactory() getUser {
+	return getUser{
+		Name: "User's name",
+	}
 }

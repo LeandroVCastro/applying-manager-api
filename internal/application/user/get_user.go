@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	userdomain "github.com/LeandroVCastro/applying-manager-api/internal/domain/user"
+	user_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/user"
 )
 
 func GetUser(response http.ResponseWriter, request *http.Request) {
-	createdUser := userdomain.GetUser()
-	fmt.Fprintf(response, "Updated response: "+createdUser)
+	getUser := user_domain.GetUserFactory()
+	user := getUser.Handle()
+	fmt.Fprintf(response, "Updated response: "+user)
 }
