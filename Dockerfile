@@ -2,7 +2,6 @@ FROM golang:1.22.2-alpine
 
 WORKDIR /app
 
-RUN go install github.com/cosmtrek/air@latest
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . ./
@@ -10,5 +9,7 @@ COPY . ./
 EXPOSE 8081
 
 WORKDIR /app/internal
+RUN go build -o ./internal/main.go
 
-CMD ["air"]
+CMD ["ls"]
+CMD ["./tmp/main"]
