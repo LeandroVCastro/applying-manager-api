@@ -1,10 +1,13 @@
 package entity
 
+import "gorm.io/gorm"
+
 type User struct {
-	Id   uint
-	Name string
-	// Email     string
-	// Password  string
+	gorm.Model
+	ID       uint
+	Name     string
+	Email    string
+	Password string
 	// CreatedAt time.Time
 	// UpdatedAt time.Time
 }
