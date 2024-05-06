@@ -6,8 +6,6 @@ type User struct {
 	gorm.Model
 	ID       uint
 	Name     string
-	Email    string
+	Email    string `gorm:"unique;not null"`
 	Password string
-	// CreatedAt time.Time
-	// UpdatedAt time.Time
 }

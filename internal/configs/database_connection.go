@@ -1,4 +1,4 @@
-package database
+package configs
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 var Connection *gorm.DB
 
 func StartConnection() {
-	fmt.Println("Connection to database...")
+	fmt.Println("Connecting to database")
 
 	userDatabase := os.Getenv("USER_DATABASE")
 	passwordDatabase := os.Getenv("PASSWORD_DATABASE")

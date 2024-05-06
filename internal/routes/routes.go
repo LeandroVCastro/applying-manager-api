@@ -14,5 +14,6 @@ func RunApi() *mux.Router {
 		fmt.Fprintf(response, "Olá, mundo!")
 	}).Methods("GET")
 	muxRouter.HandleFunc("/user", application.GetUser).Methods("GET")
+	muxRouter.HandleFunc("/user", application.CreateUser).Methods("POST")
 	return muxRouter
 }
