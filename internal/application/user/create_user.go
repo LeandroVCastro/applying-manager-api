@@ -9,8 +9,8 @@ import (
 )
 
 type RequestBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
 
 func CreateUser(response http.ResponseWriter, request *http.Request) {
@@ -18,6 +18,11 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 	errBody := route_handlers.GetRequestBody(request, &body)
 	if errBody != nil {
 		route_handlers.ErrorResponse(response, errBody.Error(), http.StatusBadRequest)
+		return
+	}
+	errValidateBody := route_handlers.ValidateBody(body)
+	if errValidateBody != nil {
+		route_handlers.ErrorResponse(response, errValidateBody.Error(), http.StatusBadRequest)
 		return
 	}
 
