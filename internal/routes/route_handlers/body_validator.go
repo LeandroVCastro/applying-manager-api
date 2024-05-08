@@ -7,10 +7,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var validate *validator.Validate
+var validate *validator.Validate = validator.New()
 
 func ValidateBody(body interface{}) error {
-	validate = validator.New()
 	errValidate := validate.Struct(body)
 	if errValidate != nil {
 		validationErrors := errValidate.(validator.ValidationErrors)
@@ -27,6 +26,9 @@ func makeFriendly(tag string) string {
 	}
 	if tag == "email" {
 		return " isn't a valid email"
+	}
+	if tag == "fqdn|http_url" {
+		return " must to be an url"
 	}
 	return " " + tag
 }
