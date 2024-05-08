@@ -43,5 +43,5 @@ func SaveCompany(response http.ResponseWriter, request *http.Request) {
 		route_handlers.ErrorResponse(response, err.Error(), http.StatusNotFound)
 		return
 	}
-	route_handlers.SuccessResponse(response, savedCompany, http.StatusAccepted)
+	route_handlers.SuccessResponse(response, savedCompany, http.StatusOK)
 }
