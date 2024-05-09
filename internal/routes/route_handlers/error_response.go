@@ -5,7 +5,10 @@ import (
 	"net/http"
 )
 
-func ErrorResponse(response http.ResponseWriter, message string, statusCode int) {
+const HeaderSuccessRequest string = "Success-Request"
+
+func ErrorResponse(response http.ResponseWriter, request *http.Request, message string, statusCode int) {
 	response.WriteHeader(statusCode)
+	request.Header.Add(HeaderSuccessRequest, "false")
 	fmt.Fprintf(response, "Error: "+message)
 }

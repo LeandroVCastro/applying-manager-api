@@ -21,12 +21,12 @@ func SaveCompany(response http.ResponseWriter, request *http.Request) {
 	body := RequestBody{}
 	errBody := route_handlers.GetRequestBody(request, &body)
 	if errBody != nil {
-		route_handlers.ErrorResponse(response, errBody.Error(), http.StatusBadRequest)
+		route_handlers.ErrorResponse(response, request, errBody.Error(), http.StatusBadRequest)
 		return
 	}
 	errValidateBody := route_handlers.ValidateBody(body)
 	if errValidateBody != nil {
-		route_handlers.ErrorResponse(response, errValidateBody.Error(), http.StatusBadRequest)
+		route_handlers.ErrorResponse(response, request, errValidateBody.Error(), http.StatusBadRequest)
 		return
 	}
 	saveCompany := company_domain.SaveCompanyFactory()
@@ -40,7 +40,7 @@ func SaveCompany(response http.ResponseWriter, request *http.Request) {
 		&body.Instagram,
 	)
 	if err != nil {
-		route_handlers.ErrorResponse(response, err.Error(), errStatus)
+		route_handlers.ErrorResponse(response, request, err.Error(), errStatus)
 		return
 	}
 	route_handlers.SuccessResponse(response, savedCompany, http.StatusOK)
