@@ -30,7 +30,7 @@ func SaveCompany(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 	saveCompany := company_domain.SaveCompanyFactory()
-	savedCompany, err := saveCompany.Handle(
+	savedCompany, errStatus, err := saveCompany.Handle(
 		body.ID,
 		body.Name,
 		&body.Description,
@@ -40,7 +40,7 @@ func SaveCompany(response http.ResponseWriter, request *http.Request) {
 		&body.Instagram,
 	)
 	if err != nil {
-		route_handlers.ErrorResponse(response, err.Error(), http.StatusNotFound)
+		route_handlers.ErrorResponse(response, err.Error(), errStatus)
 		return
 	}
 	route_handlers.SuccessResponse(response, savedCompany, http.StatusOK)

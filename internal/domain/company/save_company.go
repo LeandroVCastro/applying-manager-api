@@ -21,22 +21,27 @@ func (c saveCompany) Handle(
 	linkedin *string,
 	glassdoor *string,
 	instagram *string,
-) (savedCompany entity.Company, err error) {
+) (savedCompany *entity.Company, errStatus int, err error) {
 	if id != 0 {
 		if company := c.companyRepository.GetById(id); company == nil {
 			err = errors.New("company not found by ID '" + strconv.FormatUint(uint64(id), 10) + "'")
+			errStatus = 404
 			return
 		}
-		savedCompany, err = c.companyRepository.CreateOrUpdate(id, name, description, website, linkedin, glassdoor, instagram)
-		if err != nil {
+		savedId, updatedErr := c.companyRepository.CreateOrUpdate(id, name, description, website, linkedin, glassdoor, instagram)
+		if updatedErr != nil {
 			err = errors.New("error on update company")
+			errStatus = 400
 		}
+		savedCompany = c.companyRepository.GetById(savedId)
 		return
 	}
-	savedCompany, err = c.companyRepository.CreateOrUpdate(0, name, description, website, linkedin, glassdoor, instagram)
-	if err != nil {
+	savedId, saveErr := c.companyRepository.CreateOrUpdate(0, name, description, website, linkedin, glassdoor, instagram)
+	if saveErr != nil {
 		err = errors.New("error on create company")
+		errStatus = 400
 	}
+	savedCompany = c.companyRepository.GetById(savedId)
 	return
 }
 

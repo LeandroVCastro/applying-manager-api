@@ -29,7 +29,7 @@ func (repository CompanyRepository) CreateOrUpdate(
 	linkedin *string,
 	glassdoor *string,
 	instagram *string,
-) (companySaved entity.Company, err error) {
+) (savedId uint, err error) {
 	companyParams := entity.Company{Name: name}
 	if *description != "" {
 		companyParams.Description = description
@@ -58,7 +58,7 @@ func (repository CompanyRepository) CreateOrUpdate(
 		err = result.Error
 		return
 	}
-	companySaved = companyParams
+	savedId = companyParams.ID
 	return
 }
 

@@ -1,13 +1,20 @@
 package entity
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Company struct {
-	gorm.Model
-	Name        string `gorm:"not null"`
-	Description *string
-	Website     *string
-	Linkedin    *string
-	Glassdoor   *string
-	Instagram   *string
+	ID          uint           `gorm:"primarykey" json:"id"`
+	Name        string         `gorm:"not null" json:"name"`
+	Description *string        `json:"description"`
+	Website     *string        `json:"website"`
+	Linkedin    *string        `json:"linkedin"`
+	Glassdoor   *string        `json:"glasdoor"`
+	Instagram   *string        `json:"instagram"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	UpdatedAt   time.Time      `json:"updatedAt"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deletedAt"`
 }
