@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type CompanyRepositoryInterface interface {
+	GetById(id uint) *entity.Company
+	CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error)
+}
+
 type CompanyRepository struct {
 	connection *gorm.DB
 }

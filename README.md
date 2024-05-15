@@ -22,3 +22,11 @@ cd atlasgosdk
 # Then run main.go file
 go run main.go
 ```
+
+### Running unit tests
+
+Go to root folder and run
+
+```bash
+make test_unit
+```
