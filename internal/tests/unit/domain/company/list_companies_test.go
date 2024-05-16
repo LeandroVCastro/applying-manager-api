@@ -24,8 +24,8 @@ func TestListCompaniesDomain(t *testing.T) {
 		mockCompanyRepository.On("ListAll").Return(expectedCompanies, nil)
 		listCompanyDomain := company_domain.ListCompanies{CompanyRepository: mockCompanyRepository}
 		listedCompanies, errStatus, err := listCompanyDomain.Handle()
-		assert.Equal(t, listedCompanies, expectedCompanies)
-		assert.Equal(t, errStatus, 0)
+		assert.Equal(t, expectedCompanies, listedCompanies)
+		assert.Equal(t, 0, errStatus)
 		assert.Nil(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "ListAll", 1)
 	})
@@ -36,8 +36,8 @@ func TestListCompaniesDomain(t *testing.T) {
 		mockCompanyRepository.On("ListAll").Return(expectedCompanies, errors.New("Error to select companies"))
 		listCompanyDomain := company_domain.ListCompanies{CompanyRepository: mockCompanyRepository}
 		listedCompanies, errStatus, err := listCompanyDomain.Handle()
-		assert.Equal(t, listedCompanies, expectedCompanies)
-		assert.Equal(t, errStatus, 400)
+		assert.Equal(t, expectedCompanies, listedCompanies)
+		assert.Equal(t, 400, errStatus)
 		assert.Error(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "ListAll", 1)
 	})

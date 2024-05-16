@@ -10,22 +10,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var description string = "teste"
-var website string = "testewebsite"
-var linkedin string = "testelinkedin"
-var glassdoor string = "testeglassdoor"
-var instagram string = "testeinstagram"
-var expectedCompany = &entity.Company{
-	ID:          1,
-	Name:        "Company test name",
-	Description: &description,
-	Website:     &website,
-	Linkedin:    &linkedin,
-	Glassdoor:   &glassdoor,
-	Instagram:   &instagram,
-}
-
 func TestSaveCompanyDomain(t *testing.T) {
+	var description string = "teste"
+	var website string = "testewebsite"
+	var linkedin string = "testelinkedin"
+	var glassdoor string = "testeglassdoor"
+	var instagram string = "testeinstagram"
+	var expectedCompany = &entity.Company{
+		ID:          1,
+		Name:        "Company test name",
+		Description: &description,
+		Website:     &website,
+		Linkedin:    &linkedin,
+		Glassdoor:   &glassdoor,
+		Instagram:   &instagram,
+	}
 	t.Run("Should return error 404 when an ID is provided and company is not found", func(t *testing.T) {
 		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		var expectedCompany *entity.Company
@@ -33,7 +32,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(1, "name teste", &description, &website, &linkedin, &glassdoor, &instagram)
 		assert.Nil(t, createdCompany)
-		assert.Equal(t, errStatus, 404)
+		assert.Equal(t, 404, errStatus)
 		assert.Error(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 1)
 	})
@@ -54,7 +53,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(uint(1), "Company test name", &description, &website, &linkedin, &glassdoor, &instagram)
 		assert.Nil(t, createdCompany)
-		assert.Equal(t, errStatus, 400)
+		assert.Equal(t, 400, errStatus)
 		assert.Error(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 1)
 		mockCompanyRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
@@ -75,7 +74,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 		).Return(1, nil)
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(1, "Company test name", &description, &website, &linkedin, &glassdoor, &instagram)
-		assert.Equal(t, createdCompany, expectedCompany)
+		assert.Equal(t, expectedCompany, createdCompany)
 		assert.Equal(t, errStatus, 0)
 		assert.Nil(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 2)
@@ -96,7 +95,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(0, "Company test name", &description, &website, &linkedin, &glassdoor, &instagram)
-		assert.Equal(t, createdCompany, expectedCompany)
+		assert.Equal(t, expectedCompany, createdCompany)
 		assert.Equal(t, errStatus, 0)
 		assert.Nil(t, err)
 		mockCompanyRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)

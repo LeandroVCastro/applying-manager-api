@@ -1,4 +1,4 @@
-package application
+package application_company
 
 import (
 	"fmt"
