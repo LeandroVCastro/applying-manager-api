@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/configs"
@@ -11,10 +12,20 @@ import (
 type CompanyRepositoryInterface interface {
 	GetById(id uint) *entity.Company
 	CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error)
+	ListAll() (companies []*entity.Company, err error)
 }
 
 type CompanyRepository struct {
 	connection *gorm.DB
+}
+
+func (repository CompanyRepository) ListAll() (listedCompanies []*entity.Company, err error) {
+	result := repository.connection.Order("id ASC").Find(&listedCompanies)
+	if result.Error != nil {
+		err = errors.New(result.Error.Error())
+		return
+	}
+	return
 }
 
 func (repository CompanyRepository) GetById(id uint) (companyFound *entity.Company) {

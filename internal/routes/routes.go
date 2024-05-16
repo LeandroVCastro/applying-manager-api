@@ -9,6 +9,10 @@ import (
 func RunApi() *mux.Router {
 	muxRouter := mux.NewRouter()
 
-	muxRouter.HandleFunc("/company", middleware.DbTransactions(application.SaveCompany)).Methods("POST")
+	// Company routes
+	companyRoutes := muxRouter.PathPrefix("/company").Subrouter()
+	companyRoutes.HandleFunc("", middleware.DbTransactions(application.SaveCompany)).Methods("POST")
+	companyRoutes.HandleFunc("", middleware.DbTransactions(application.ListCompanies)).Methods("GET")
+
 	return muxRouter
 }

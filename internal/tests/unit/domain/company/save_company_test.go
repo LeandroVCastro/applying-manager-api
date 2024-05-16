@@ -2,28 +2,13 @@ package company_domain
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
-
-type MockCompanyRepository struct {
-	mock.Mock
-}
-
-func (m *MockCompanyRepository) GetById(id uint) *entity.Company {
-	args := m.Called(id)
-	return args.Get(0).(*entity.Company)
-}
-
-func (m *MockCompanyRepository) CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error) {
-	args := m.Called(id, name, description, website, linkedin, glassdoor, instagram)
-	return uint(args.Int(0)), args.Error(1)
-}
 
 var description string = "teste"
 var website string = "testewebsite"
@@ -42,7 +27,7 @@ var expectedCompany = &entity.Company{
 
 func TestSaveCompanyDomain(t *testing.T) {
 	t.Run("Should return error 404 when an ID is provided and company is not found", func(t *testing.T) {
-		mockCompanyRepository := new(MockCompanyRepository)
+		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		var expectedCompany *entity.Company
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
@@ -54,7 +39,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error when update fails", func(t *testing.T) {
-		mockCompanyRepository := new(MockCompanyRepository)
+		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On(
 			"CreateOrUpdate",
@@ -68,9 +53,6 @@ func TestSaveCompanyDomain(t *testing.T) {
 		).Return(0, errors.New("error on update"))
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(uint(1), "Company test name", &description, &website, &linkedin, &glassdoor, &instagram)
-		fmt.Println("createdCompany", createdCompany)
-		fmt.Println("errStatus", errStatus)
-		fmt.Println("err", err)
 		assert.Nil(t, createdCompany)
 		assert.Equal(t, errStatus, 400)
 		assert.Error(t, err)
@@ -79,7 +61,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should updated a company when pass an valid ID", func(t *testing.T) {
-		mockCompanyRepository := new(MockCompanyRepository)
+		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On(
 			"CreateOrUpdate",
@@ -100,7 +82,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return company created when ID passed is equal zero", func(t *testing.T) {
-		mockCompanyRepository := new(MockCompanyRepository)
+		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		mockCompanyRepository.On(
 			"CreateOrUpdate",
 			uint(0),

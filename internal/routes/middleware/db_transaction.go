@@ -13,10 +13,10 @@ func DbTransactions(next http.HandlerFunc) http.HandlerFunc {
 		transactions := configs.Connection.Begin()
 		next(response, request)
 		if request.Header.Get(route_handlers.HeaderSuccessRequest) == "false" {
-			fmt.Println("transactions rollback: ", request.URL)
+			fmt.Println("transactions rollback: ", request.Method, request.URL)
 			transactions.Rollback()
 		} else {
-			fmt.Println("transactions commit: ", request.URL)
+			fmt.Println("transactions commit: ", request.Method, request.URL)
 			transactions.Commit()
 		}
 	}
