@@ -1,4 +1,4 @@
-package repository
+package company_repository
 
 import (
 	"errors"

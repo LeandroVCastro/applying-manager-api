@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
-	"github.com/LeandroVCastro/applying-manager-api/internal/repository"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
 type GetCompany struct {
-	CompanyRepository repository.CompanyRepositoryInterface
+	CompanyRepository company_repository.CompanyRepositoryInterface
 }
 
 func (c GetCompany) Handle(id uint) (company *entity.Company, errStatus int, err error) {
@@ -30,6 +30,6 @@ func (c GetCompany) Handle(id uint) (company *entity.Company, errStatus int, err
 
 func GetCompanyFactory() GetCompany {
 	return GetCompany{
-		CompanyRepository: repository.CompanyRepositoryFactory(),
+		CompanyRepository: company_repository.CompanyRepositoryFactory(),
 	}
 }

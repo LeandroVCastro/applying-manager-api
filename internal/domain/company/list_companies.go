@@ -2,11 +2,11 @@ package company_domain
 
 import (
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
-	"github.com/LeandroVCastro/applying-manager-api/internal/repository"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
 type ListCompanies struct {
-	CompanyRepository repository.CompanyRepositoryInterface
+	CompanyRepository company_repository.CompanyRepositoryInterface
 }
 
 func (c ListCompanies) Handle() (companies []*entity.Company, errStatus int, err error) {
@@ -19,6 +19,6 @@ func (c ListCompanies) Handle() (companies []*entity.Company, errStatus int, err
 
 func ListCompaniesFactory() ListCompanies {
 	return ListCompanies{
-		CompanyRepository: repository.CompanyRepositoryFactory(),
+		CompanyRepository: company_repository.CompanyRepositoryFactory(),
 	}
 }

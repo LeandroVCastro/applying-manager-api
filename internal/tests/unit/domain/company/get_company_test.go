@@ -1,11 +1,11 @@
-package company_domain
+package company_domain_unit_test
 
 import (
 	"testing"
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
-	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
+	company_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +26,7 @@ func TestGetCompanyDomain(t *testing.T) {
 	}
 
 	t.Run("Should return error when an ID is not provided", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		listCompanyDomain := company_domain.GetCompany{CompanyRepository: mockCompanyRepository}
 		_, errStatus, err := listCompanyDomain.Handle(0)
 		assert.Equal(t, 400, errStatus)
@@ -35,7 +35,7 @@ func TestGetCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error 404 when company not found", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		var expectedCompany *entity.Company
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		listCompanyDomain := company_domain.GetCompany{CompanyRepository: mockCompanyRepository}
@@ -46,7 +46,7 @@ func TestGetCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return the company returned by repository", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		listCompanyDomain := company_domain.GetCompany{CompanyRepository: mockCompanyRepository}
 		company, errStatus, err := listCompanyDomain.Handle(uint(1))

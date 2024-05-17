@@ -1,4 +1,4 @@
-package company_domain
+package company_domain_unit_test
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
-	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
+	company_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +27,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 	}
 
 	t.Run("Should return error when an ID is not provided", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		deleteCompanyDomain := company_domain.DeleteCompany{CompanyRepository: mockCompanyRepository}
 		errStatus, err := deleteCompanyDomain.Handle(0)
 		assert.Equal(t, 400, errStatus)
@@ -36,7 +36,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error 404 when company not found", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		var expectedNilCompany *entity.Company
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedNilCompany)
 		deleteCompanyDomain := company_domain.DeleteCompany{CompanyRepository: mockCompanyRepository}
@@ -47,7 +47,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error 500 when something went to Delete repository method", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On("Delete", uint(1)).Return(errors.New("error"))
 		deleteCompanyDomain := company_domain.DeleteCompany{CompanyRepository: mockCompanyRepository}
@@ -59,7 +59,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error nil when company is deleted successfully", func(t *testing.T) {
-		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On("Delete", uint(1)).Return(nil)
 		deleteCompanyDomain := company_domain.DeleteCompany{CompanyRepository: mockCompanyRepository}

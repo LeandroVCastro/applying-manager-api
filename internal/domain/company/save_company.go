@@ -6,11 +6,11 @@ import (
 	"strconv"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
-	"github.com/LeandroVCastro/applying-manager-api/internal/repository"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
 type SaveCompany struct {
-	CompanyRepository repository.CompanyRepositoryInterface
+	CompanyRepository company_repository.CompanyRepositoryInterface
 }
 
 func (c SaveCompany) Handle(
@@ -49,6 +49,6 @@ func (c SaveCompany) Handle(
 
 func SaveCompanyFactory() SaveCompany {
 	return SaveCompany{
-		CompanyRepository: repository.CompanyRepositoryFactory(),
+		CompanyRepository: company_repository.CompanyRepositoryFactory(),
 	}
 }

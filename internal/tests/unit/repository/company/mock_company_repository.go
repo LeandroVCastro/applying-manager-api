@@ -1,4 +1,4 @@
-package company_repository
+package company_repository_unit_test
 
 import (
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"

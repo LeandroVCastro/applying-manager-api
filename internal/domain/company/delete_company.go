@@ -4,11 +4,11 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/LeandroVCastro/applying-manager-api/internal/repository"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
 type DeleteCompany struct {
-	CompanyRepository repository.CompanyRepositoryInterface
+	CompanyRepository company_repository.CompanyRepositoryInterface
 }
 
 func (c DeleteCompany) Handle(id uint) (errStatus int, err error) {
@@ -34,6 +34,6 @@ func (c DeleteCompany) Handle(id uint) (errStatus int, err error) {
 
 func DeleteCompanyFactory() DeleteCompany {
 	return DeleteCompany{
-		CompanyRepository: repository.CompanyRepositoryFactory(),
+		CompanyRepository: company_repository.CompanyRepositoryFactory(),
 	}
 }
