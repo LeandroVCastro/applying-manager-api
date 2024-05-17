@@ -13,6 +13,7 @@ type CompanyRepositoryInterface interface {
 	GetById(id uint) *entity.Company
 	CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error)
 	ListAll() (companies []*entity.Company, err error)
+	Delete(id uint) error
 }
 
 type CompanyRepository struct {
@@ -35,6 +36,16 @@ func (repository CompanyRepository) GetById(id uint) (companyFound *entity.Compa
 		return
 	}
 	return &company
+}
+
+func (repository CompanyRepository) Delete(id uint) error {
+	var company = entity.Company{}
+	result := repository.connection.Where("ID = ?", id).Delete(&company)
+	if result.Error != nil {
+		err := errors.New(result.Error.Error())
+		return err
+	}
+	return nil
 }
 
 func (repository CompanyRepository) CreateOrUpdate(

@@ -37,7 +37,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 1)
 	})
 
-	t.Run("Should return error when update fails", func(t *testing.T) {
+	t.Run("Should return error 400 when update fails", func(t *testing.T) {
 		mockCompanyRepository := new(company_repository.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On(
@@ -101,5 +101,26 @@ func TestSaveCompanyDomain(t *testing.T) {
 		mockCompanyRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 1)
 		mockCompanyRepository.AssertCalled(t, "GetById", uint(1))
+	})
+
+	t.Run("Should return error 400 when Create fails", func(t *testing.T) {
+		mockCompanyRepository := new(company_repository.MockCompanyRepository)
+		mockCompanyRepository.On(
+			"CreateOrUpdate",
+			uint(0),
+			"Company test name",
+			&description,
+			&website,
+			&linkedin,
+			&glassdoor,
+			&instagram,
+		).Return(0, errors.New("error on create"))
+		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
+		createdCompany, errStatus, err := saveCompanyDomain.Handle(0, "Company test name", &description, &website, &linkedin, &glassdoor, &instagram)
+		assert.Nil(t, createdCompany)
+		assert.Equal(t, 400, errStatus)
+		assert.Error(t, err)
+		mockCompanyRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
+		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 0)
 	})
 }

@@ -23,3 +23,8 @@ func (m *MockCompanyRepository) ListAll() (listedCompanies []*entity.Company, er
 	args := m.Called()
 	return args.Get(0).([]*entity.Company), args.Error(1)
 }
+
+func (m *MockCompanyRepository) Delete(id uint) error {
+	args := m.Called(id)
+	return args.Error(0)
+}

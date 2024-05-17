@@ -41,6 +41,7 @@ func (c SaveCompany) Handle(
 	if saveErr != nil {
 		err = errors.New("error on create company")
 		errStatus = 400
+		return
 	}
 	savedCompany = c.CompanyRepository.GetById(savedId)
 	return
