@@ -14,6 +14,7 @@ func RunApi() *mux.Router {
 	companyRoutes.HandleFunc("", middleware.DbTransactions(application_company.SaveCompany)).Methods("POST")
 	companyRoutes.HandleFunc("", middleware.DbTransactions(application_company.ListCompanies)).Methods("GET")
 	companyRoutes.HandleFunc("/{id}", middleware.DbTransactions(application_company.GetCompany)).Methods("GET")
+	companyRoutes.HandleFunc("/{id}", middleware.DbTransactions(application_company.DeleteCompany)).Methods("DELETE")
 
 	return muxRouter
 }
