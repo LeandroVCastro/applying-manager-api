@@ -13,6 +13,7 @@ type PlatformRepositoryInterface interface {
 	GetById(id uint) *entity.Platform
 	CreateOrUpdate(id uint, name string, website *string) (savedId uint, err error)
 	ListAll() (platforms []*entity.Platform, err error)
+	Delete(id uint) error
 }
 
 type PlatformRepository struct {
@@ -67,4 +68,14 @@ func PlatformRepositoryFactory() PlatformRepository {
 		connection: configs.Connection,
 	}
 	return repository
+}
+
+func (repository PlatformRepository) Delete(id uint) error {
+	var platform = entity.Platform{}
+	result := repository.connection.Where("ID = ?", id).Delete(&platform)
+	if result.Error != nil {
+		err := errors.New(result.Error.Error())
+		return err
+	}
+	return nil
 }

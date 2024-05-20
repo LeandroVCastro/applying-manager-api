@@ -21,6 +21,10 @@ func (m *MockPlatformRepository) CreateOrUpdate(id uint, name string, website *s
 
 func (m *MockPlatformRepository) ListAll() (listedPlatforms []*entity.Platform, err error) {
 	args := m.Called()
-	return args.Get(0).([]*entity.Platform), args.Error((1))
-	// return uint(args.Int(0)), args.Error(1)
+	return args.Get(0).([]*entity.Platform), args.Error(1)
+}
+
+func (m *MockPlatformRepository) Delete(id uint) (err error) {
+	args := m.Called(id)
+	return args.Error(0)
 }
