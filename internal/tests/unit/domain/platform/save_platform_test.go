@@ -46,19 +46,38 @@ func TestSaveCompanyDomain(t *testing.T) {
 	})
 
 	t.Run("Should return error 400 when Create fails", func(t *testing.T) {
-		mockCompanyRepository := new(platform_repository_unit_test.MockPlatformRepository)
-		mockCompanyRepository.On(
+		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
+		mockPlatformRepository.On(
 			"CreateOrUpdate",
 			uint(0),
 			"Platform test name",
 			&website,
 		).Return(0, errors.New("error on create"))
-		savePlatformDomain := platform_domain.SavePlatform{PlatformRepository: mockCompanyRepository}
+		savePlatformDomain := platform_domain.SavePlatform{PlatformRepository: mockPlatformRepository}
 		createdPlatform, errStatus, err := savePlatformDomain.Handle(0, "Platform test name", &website)
 		assert.Nil(t, createdPlatform)
 		assert.Equal(t, 400, errStatus)
 		assert.Error(t, err)
-		mockCompanyRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
-		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 0)
+		mockPlatformRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
+		mockPlatformRepository.AssertNumberOfCalls(t, "GetById", 0)
+	})
+
+	t.Run("Should return error 400 when Update fails", func(t *testing.T) {
+		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
+		mockPlatformRepository.On("GetById", uint(1)).Return(expectedPlatform)
+		mockPlatformRepository.On(
+			"CreateOrUpdate",
+			uint(1),
+			"Platform test name updated",
+			&website,
+		).Return(1, errors.New("error on update"))
+		savePlatformDomain := platform_domain.SavePlatform{PlatformRepository: mockPlatformRepository}
+		savedPlatform, errStatus, err := savePlatformDomain.Handle(uint(1), "Platform test name updated", &website)
+		assert.Nil(t, savedPlatform)
+		assert.Equal(t, 400, errStatus)
+		assert.Error(t, err)
+		assert.Equal(t, "error on update platform", err.Error())
+		mockPlatformRepository.AssertNumberOfCalls(t, "CreateOrUpdate", 1)
+		mockPlatformRepository.AssertNumberOfCalls(t, "GetById", 1)
 	})
 }
