@@ -9,18 +9,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func DeletePlatform(response http.ResponseWriter, request *http.Request) {
+func GetPlatform(response http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	platformId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		route_handlers.ErrorResponse(response, request, "invalid ID", 400)
 		return
 	}
-	deletePlatform := platform_domain.DeletePlatformFactory()
-	errStatus, errDeletePlatform := deletePlatform.Handle(uint(platformId))
-	if errDeletePlatform != nil {
-		route_handlers.ErrorResponse(response, request, errDeletePlatform.Error(), errStatus)
+	getPlatform := platform_domain.GetPlatformFactory()
+	platform, errStatus, errGetPlatform := getPlatform.Handle(uint(platformId))
+	if errGetPlatform != nil {
+		route_handlers.ErrorResponse(response, request, errGetPlatform.Error(), errStatus)
 		return
 	}
-	route_handlers.SuccessResponse(response, nil, http.StatusOK)
+	route_handlers.SuccessResponse(response, platform, http.StatusOK)
 }

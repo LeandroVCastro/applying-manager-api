@@ -9,8 +9,8 @@ type ListPlatforms struct {
 	PlatformRepository platform_repository.PlatformRepositoryInterface
 }
 
-func (c ListPlatforms) Handle() (platforms []*entity.Platform, errStatus int, err error) {
-	platforms, err = c.PlatformRepository.ListAll()
+func (p ListPlatforms) Handle() (platforms []*entity.Platform, errStatus int, err error) {
+	platforms, err = p.PlatformRepository.ListAll()
 	if err != nil {
 		errStatus = 400
 	}

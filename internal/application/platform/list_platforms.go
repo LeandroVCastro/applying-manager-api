@@ -1,4 +1,4 @@
-package application_platform
+package platform_application
 
 import (
 	"net/http"

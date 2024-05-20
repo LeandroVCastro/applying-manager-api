@@ -1,4 +1,4 @@
-package application_company
+package company_application
 
 import (
 	"net/http"

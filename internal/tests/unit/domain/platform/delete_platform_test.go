@@ -58,7 +58,7 @@ func TestDeletePlatformDomain(t *testing.T) {
 		mockPlatformRepository.AssertNumberOfCalls(t, "Delete", 1)
 	})
 
-	t.Run("Should execute Delete and not return error when all is okay", func(t *testing.T) {
+	t.Run("Should execute Delete and not return error when everything is okay", func(t *testing.T) {
 		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
 		mockPlatformRepository.On("GetById", uint(1)).Return(expectedPlatform)
 		mockPlatformRepository.On("Delete", uint(1)).Return(nil)
