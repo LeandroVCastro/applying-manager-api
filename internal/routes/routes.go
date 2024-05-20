@@ -20,7 +20,7 @@ func RunApi() *mux.Router {
 	// Platform routes
 	platformRoutes := muxRouter.PathPrefix("/platform").Subrouter()
 	platformRoutes.HandleFunc("", middleware.DbTransactions(application_platform.SavePlatform)).Methods("POST")
-	// companyRoutes.HandleFunc("", middleware.DbTransactions(application_company.ListCompanies)).Methods("GET")
+	platformRoutes.HandleFunc("", middleware.DbTransactions(application_platform.ListPlatforms)).Methods("GET")
 	// companyRoutes.HandleFunc("/{id}", middleware.DbTransactions(application_company.GetCompany)).Methods("GET")
 	// companyRoutes.HandleFunc("/{id}", middleware.DbTransactions(application_company.DeleteCompany)).Methods("DELETE")
 

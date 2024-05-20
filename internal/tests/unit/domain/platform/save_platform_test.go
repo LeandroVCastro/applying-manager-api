@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSaveCompanyDomain(t *testing.T) {
+func TestSavePlatformDomain(t *testing.T) {
 	var website string = "testewebsite"
 	var expectedPlatform = &entity.Platform{
 		ID:      1,

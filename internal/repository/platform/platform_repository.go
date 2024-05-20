@@ -1,6 +1,7 @@
 package platform_repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/configs"
@@ -11,10 +12,20 @@ import (
 type PlatformRepositoryInterface interface {
 	GetById(id uint) *entity.Platform
 	CreateOrUpdate(id uint, name string, website *string) (savedId uint, err error)
+	ListAll() (platforms []*entity.Platform, err error)
 }
 
 type PlatformRepository struct {
 	connection *gorm.DB
+}
+
+func (repository PlatformRepository) ListAll() (listedPlatforms []*entity.Platform, err error) {
+	result := repository.connection.Order("id ASC").Find(&listedPlatforms)
+	if result.Error != nil {
+		err = errors.New(result.Error.Error())
+		return
+	}
+	return
 }
 
 func (repository PlatformRepository) GetById(id uint) *entity.Platform {
