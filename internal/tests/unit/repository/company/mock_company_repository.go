@@ -2,6 +2,7 @@ package company_repository_unit_test
 
 import (
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -19,9 +20,9 @@ func (m *MockCompanyRepository) CreateOrUpdate(id uint, name string, description
 	return uint(args.Int(0)), args.Error(1)
 }
 
-func (m *MockCompanyRepository) ListAll() (listedCompanies []*entity.Company, err error) {
+func (m *MockCompanyRepository) ListAll() (listedCompanies []*company_repository.SelectNoRelations, err error) {
 	args := m.Called()
-	return args.Get(0).([]*entity.Company), args.Error(1)
+	return args.Get(0).([]*company_repository.SelectNoRelations), args.Error(1)
 }
 
 func (m *MockCompanyRepository) Delete(id uint) error {
