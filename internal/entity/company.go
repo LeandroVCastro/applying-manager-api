@@ -14,9 +14,9 @@ type Company struct {
 	Linkedin    *string        `json:"linkedin"`
 	Glassdoor   *string        `json:"glasdoor"`
 	Instagram   *string        `json:"instagram"`
-	CreatedAt   time.Time      `json:"createdAt"`
-	UpdatedAt   time.Time      `json:"updatedAt"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deletedAt"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 
 	Applyments []Applyment `json:"applyments"`
 }

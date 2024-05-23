@@ -18,6 +18,7 @@ func (c DeleteCompany) Handle(id uint) (errStatus int, err error) {
 		return
 	}
 	company := c.CompanyRepository.GetById(id)
+
 	if company == nil {
 		err = errors.New("Company not found with ID: " + strconv.Itoa(int(id)))
 		errStatus = 404

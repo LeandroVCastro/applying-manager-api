@@ -22,21 +22,20 @@ type CompanyRepository struct {
 }
 
 type SelectNoRelations struct {
-	ID          uint      `json:"id"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	Website     *string   `json:"website"`
-	Linkedin    *string   `json:"linkedin"`
-	Glassdoor   *string   `json:"glasdoor"`
-	Instagram   *string   `json:"instagram"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	ID          uint           `json:"id"`
+	Name        string         `json:"name"`
+	Description *string        `json:"description"`
+	Website     *string        `json:"website"`
+	Linkedin    *string        `json:"linkedin"`
+	Glassdoor   *string        `json:"glasdoor"`
+	Instagram   *string        `json:"instagram"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
 }
 
-var selectFieldsNoRelations = []string{"id", "name", "description", "website", "linkedin", "glassdoor", "instagram", "created_at", "updated_at"}
-
 func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelations, err error) {
-	result := repository.connection.Table("companies").Select(selectFieldsNoRelations).Order("id ASC").Find(&listedCompanies)
+	result := repository.connection.Table("companies").Order("id ASC").Find(&listedCompanies)
 	if result.Error != nil {
 		err = errors.New(result.Error.Error())
 		return
@@ -45,7 +44,10 @@ func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelati
 }
 
 func (repository CompanyRepository) GetById(id uint) (companyFound *SelectNoRelations) {
-	repository.connection.Table("companies").Select(selectFieldsNoRelations).First(&companyFound, "id = ?", id)
+	result := repository.connection.Table("companies").First(&companyFound, "id = ?", id)
+	if result.Error != nil {
+		return nil
+	}
 	return
 }
 
