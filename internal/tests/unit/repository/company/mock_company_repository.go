@@ -1,7 +1,6 @@
 package company_repository_unit_test
 
 import (
-	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 	"github.com/stretchr/testify/mock"
 )
@@ -10,9 +9,9 @@ type MockCompanyRepository struct {
 	mock.Mock
 }
 
-func (m *MockCompanyRepository) GetById(id uint) *entity.Company {
+func (m *MockCompanyRepository) GetById(id uint) *company_repository.SelectNoRelations {
 	args := m.Called(id)
-	return args.Get(0).(*entity.Company)
+	return args.Get(0).(*company_repository.SelectNoRelations)
 }
 
 func (m *MockCompanyRepository) CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error) {

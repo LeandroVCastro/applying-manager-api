@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
-	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 	company_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +17,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 	var linkedin string = "testelinkedin"
 	var glassdoor string = "testeglassdoor"
 	var instagram string = "testeinstagram"
-	var expectedCompany = &entity.Company{
+	var expectedCompany = &company_repository.SelectNoRelations{
 		ID:          1,
 		Name:        "Company test name",
 		Description: &description,
@@ -28,7 +28,7 @@ func TestSaveCompanyDomain(t *testing.T) {
 	}
 	t.Run("Should return error 404 when an ID is provided and company is not found", func(t *testing.T) {
 		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
-		var expectedCompany *entity.Company
+		var expectedCompany *company_repository.SelectNoRelations
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		saveCompanyDomain := company_domain.SaveCompany{CompanyRepository: mockCompanyRepository}
 		createdCompany, errStatus, err := saveCompanyDomain.Handle(1, "name teste", &description, &website, &linkedin, &glassdoor, &instagram)

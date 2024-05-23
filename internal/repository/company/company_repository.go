@@ -11,7 +11,7 @@ import (
 )
 
 type CompanyRepositoryInterface interface {
-	GetById(id uint) *entity.Company
+	GetById(id uint) *SelectNoRelations
 	CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error)
 	ListAll() (companies []*SelectNoRelations, err error)
 	Delete(id uint) error
@@ -33,9 +33,10 @@ type SelectNoRelations struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+var selectFieldsNoRelations = []string{"id", "name", "description", "website", "linkedin", "glassdoor", "instagram", "created_at", "updated_at"}
+
 func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelations, err error) {
-	selectFields := []string{"id", "name", "description", "website", "linkedin", "glassdoor", "instagram", "created_at", "updated_at"}
-	result := repository.connection.Table("companies").Select(selectFields).Order("id ASC").Find(&listedCompanies)
+	result := repository.connection.Table("companies").Select(selectFieldsNoRelations).Order("id ASC").Find(&listedCompanies)
 	if result.Error != nil {
 		err = errors.New(result.Error.Error())
 		return
@@ -43,13 +44,9 @@ func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelati
 	return
 }
 
-func (repository CompanyRepository) GetById(id uint) (companyFound *entity.Company) {
-	var company = entity.Company{}
-	result := repository.connection.First(&company, id)
-	if result.Error != nil {
-		return
-	}
-	return &company
+func (repository CompanyRepository) GetById(id uint) (companyFound *SelectNoRelations) {
+	repository.connection.Table("companies").Select(selectFieldsNoRelations).First(&companyFound, "id = ?", id)
+	return
 }
 
 func (repository CompanyRepository) Delete(id uint) error {

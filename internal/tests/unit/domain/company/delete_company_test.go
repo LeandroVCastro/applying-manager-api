@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
-	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
+	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 	company_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/company"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +16,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 	var linkedin string = "testelinkedin"
 	var glassdoor string = "testeglassdoor"
 	var instagram string = "testeinstagram"
-	var expectedCompany = &entity.Company{
+	var expectedCompany = &company_repository.SelectNoRelations{
 		ID:          1,
 		Name:        "Company test name",
 		Description: &description,
@@ -37,7 +37,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 
 	t.Run("Should return error 404 when company not found", func(t *testing.T) {
 		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
-		var expectedNilCompany *entity.Company
+		var expectedNilCompany *company_repository.SelectNoRelations
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedNilCompany)
 		deleteCompanyDomain := company_domain.DeleteCompany{CompanyRepository: mockCompanyRepository}
 		errStatus, err := deleteCompanyDomain.Handle(uint(1))
