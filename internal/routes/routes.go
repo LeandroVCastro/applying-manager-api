@@ -1,6 +1,7 @@
 package routes
 
 import (
+	applyment_application "github.com/LeandroVCastro/applying-manager-api/internal/application/applyment"
 	company_application "github.com/LeandroVCastro/applying-manager-api/internal/application/company"
 	platform_application "github.com/LeandroVCastro/applying-manager-api/internal/application/platform"
 	"github.com/LeandroVCastro/applying-manager-api/internal/routes/middleware"
@@ -24,5 +25,8 @@ func RunApi() *mux.Router {
 	platformRoutes.HandleFunc("/{id}", middleware.DbTransactions(platform_application.GetPlatform)).Methods("GET")
 	platformRoutes.HandleFunc("/{id}", middleware.DbTransactions(platform_application.DeletePlatform)).Methods("DELETE")
 
+	// Applyment routes
+	applymentRoutes := muxRouter.PathPrefix("/applyment").Subrouter()
+	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.GetApplyment)).Methods("GET")
 	return muxRouter
 }

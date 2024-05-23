@@ -1,7 +1,6 @@
 package company_application
 
 import (
-	"fmt"
 	"net/http"
 
 	company_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/company"
@@ -11,7 +10,6 @@ import (
 func ListCompanies(response http.ResponseWriter, request *http.Request) {
 	listCompanies := company_domain.ListCompaniesFactory()
 	listedCompanies, errStatus, err := listCompanies.Handle()
-	fmt.Println("listedCompanies", listedCompanies)
 	if err != nil {
 		route_handlers.ErrorResponse(response, request, err.Error(), errStatus)
 		return
