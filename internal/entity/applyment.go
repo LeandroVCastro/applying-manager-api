@@ -11,12 +11,12 @@ type Applyment struct {
 	Title       string         `gorm:"not null" json:"title"`
 	Description *string        `json:"description"`
 	Link        *string        `json:"link"`
-	CompanyID   *int           `json:"companyId"`
+	CompanyID   *int           `json:"company_id"`
 	Company     Company        `json:"company"`
-	PlatformId  *int           `json:"platformId"`
+	PlatformId  *int           `json:"platform_id"`
 	Platform    Platform       `json:"platform"`
-	AppliedAt   time.Time      `json:"applieddAt"`
-	CreatedAt   time.Time      `json:"createdAt"`
-	UpdatedAt   time.Time      `json:"updatedAt"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deletedAt"`
+	AppliedAt   time.Time      `json:"applied_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	platform_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/platform"
-	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
+	platform_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/platform"
 	platform_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/platform"
 
 	"github.com/stretchr/testify/assert"
@@ -13,14 +13,14 @@ import (
 
 func TestSavePlatformDomain(t *testing.T) {
 	var website string = "testewebsite"
-	var expectedPlatform = &entity.Platform{
+	var expectedPlatform = &platform_repository.SelectNoRelations{
 		ID:      1,
 		Name:    "Platform test name",
 		Website: &website,
 	}
 	t.Run("Should return error 404 when an ID is provided and platform is not found", func(t *testing.T) {
 		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
-		var foundPlatform *entity.Platform
+		var foundPlatform *platform_repository.SelectNoRelations
 		mockPlatformRepository.On("GetById", uint(1)).Return(foundPlatform)
 		savePlatformDomain := platform_domain.SavePlatform{PlatformRepository: mockPlatformRepository}
 		createdCompany, errStatus, err := savePlatformDomain.Handle(1, "name teste", nil)
