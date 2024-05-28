@@ -9,14 +9,14 @@ import (
 type Applyment struct {
 	ID          uint           `gorm:"primarykey" json:"id"`
 	Title       string         `gorm:"not null" json:"title"`
-	Description *string        `json:"description"`
-	Link        *string        `json:"link"`
-	CompanyID   *int           `json:"company_id"`
-	Company     Company        `json:"company"`
-	PlatformId  *int           `json:"platform_id"`
-	Platform    Platform       `json:"platform"`
-	AppliedAt   time.Time      `json:"applied_at"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	Description *string        `json:"description,omitempty"`
+	Link        *string        `json:"link,omitempty"`
+	CompanyID   *int           `json:"company_id,omitempty"`
+	Company     *Company       `json:"company,omitempty"`
+	PlatformId  *int           `json:"platform_id,omitempty"`
+	Platform    *Platform      `json:"platform,omitempty"`
+	AppliedAt   *time.Time     `json:"applied_at,omitempty"`
+	CreatedAt   *time.Time     `json:"created_at,omitempty"`
+	UpdatedAt   *time.Time     `json:"updated_at,omitempty"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
 }

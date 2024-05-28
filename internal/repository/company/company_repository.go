@@ -3,7 +3,6 @@ package company_repository
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/configs"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
@@ -11,9 +10,9 @@ import (
 )
 
 type CompanyRepositoryInterface interface {
-	GetById(id uint) *SelectNoRelations
+	GetById(id uint) *entity.Company
 	CreateOrUpdate(id uint, name string, description, website, linkedin, glassdoor, instagram *string) (uint, error)
-	ListAll() (companies []*SelectNoRelations, err error)
+	ListAll() (companies []*entity.Company, err error)
 	Delete(id uint) error
 }
 
@@ -21,21 +20,8 @@ type CompanyRepository struct {
 	connection *gorm.DB
 }
 
-type SelectNoRelations struct {
-	ID          uint           `json:"id"`
-	Name        string         `json:"name"`
-	Description *string        `json:"description"`
-	Website     *string        `json:"website"`
-	Linkedin    *string        `json:"linkedin"`
-	Glassdoor   *string        `json:"glasdoor"`
-	Instagram   *string        `json:"instagram"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
-}
-
-func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelations, err error) {
-	result := repository.connection.Table("companies").Order("id ASC").Find(&listedCompanies)
+func (repository CompanyRepository) ListAll() (listedCompanies []*entity.Company, err error) {
+	result := repository.connection.Select([]string{"id", "name", "description", "website", "linkedin", "glassdoor", "instagram", "created_at", "updated_at"}).Order("id ASC").Find(&listedCompanies)
 	if result.Error != nil {
 		err = errors.New(result.Error.Error())
 		return
@@ -43,8 +29,8 @@ func (repository CompanyRepository) ListAll() (listedCompanies []*SelectNoRelati
 	return
 }
 
-func (repository CompanyRepository) GetById(id uint) (companyFound *SelectNoRelations) {
-	result := repository.connection.Table("companies").First(&companyFound, "id = ?", id)
+func (repository CompanyRepository) GetById(id uint) (companyFound *entity.Company) {
+	result := repository.connection.Select([]string{"id", "name", "description", "website", "linkedin", "glassdoor", "instagram", "created_at", "updated_at"}).First(&companyFound, "id = ?", id)
 	if result.Error != nil {
 		return nil
 	}

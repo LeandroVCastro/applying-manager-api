@@ -5,6 +5,7 @@ import (
 
 	"strconv"
 
+	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
@@ -20,7 +21,7 @@ func (c SaveCompany) Handle(
 	linkedin *string,
 	glassdoor *string,
 	instagram *string,
-) (savedCompany *company_repository.SelectNoRelations, errStatus int, err error) {
+) (savedCompany *entity.Company, errStatus int, err error) {
 	if id != 0 {
 		if company := c.CompanyRepository.GetById(id); company == nil {
 			err = errors.New("company not found by ID '" + strconv.FormatUint(uint64(id), 10) + "'")

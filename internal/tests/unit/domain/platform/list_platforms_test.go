@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	platform_domain "github.com/LeandroVCastro/applying-manager-api/internal/domain/platform"
-	platform_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/platform"
+	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	platform_repository_unit_test "github.com/LeandroVCastro/applying-manager-api/internal/tests/unit/repository/platform"
 	"github.com/stretchr/testify/assert"
 )
@@ -14,11 +14,11 @@ func TestListPlatformsDomain(t *testing.T) {
 
 	t.Run("Should return exactly what repository returns", func(t *testing.T) {
 		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
-		expectedPlatforms := []*platform_repository.SelectNoRelations{}
-		expectedPlatforms = append(expectedPlatforms, &platform_repository.SelectNoRelations{
+		expectedPlatforms := []*entity.Platform{}
+		expectedPlatforms = append(expectedPlatforms, &entity.Platform{
 			ID:   1,
 			Name: "Platform test name",
-		}, &platform_repository.SelectNoRelations{
+		}, &entity.Platform{
 			ID:   2,
 			Name: "Another platform test name",
 		})
@@ -33,7 +33,7 @@ func TestListPlatformsDomain(t *testing.T) {
 
 	t.Run("Should return error when repository fails", func(t *testing.T) {
 		mockPlatformRepository := new(platform_repository_unit_test.MockPlatformRepository)
-		expectedPlatforms := []*platform_repository.SelectNoRelations{}
+		expectedPlatforms := []*entity.Platform{}
 		mockPlatformRepository.On("ListAll").Return(expectedPlatforms, errors.New("Error to select platforms"))
 		listPlatformDomain := platform_domain.ListPlatforms{PlatformRepository: mockPlatformRepository}
 		listedPlatforms, errStatus, err := listPlatformDomain.Handle()

@@ -5,6 +5,7 @@ import (
 
 	"strconv"
 
+	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	platform_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/platform"
 )
 
@@ -16,7 +17,7 @@ func (p SavePlatform) Handle(
 	id uint,
 	name string,
 	website *string,
-) (savedPlatform *platform_repository.SelectNoRelations, errStatus int, err error) {
+) (savedPlatform *entity.Platform, errStatus int, err error) {
 	if id != 0 {
 		if platform := p.PlatformRepository.GetById(id); platform == nil {
 			err = errors.New("platform not found by ID '" + strconv.FormatUint(uint64(id), 10) + "'")

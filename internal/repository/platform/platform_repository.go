@@ -3,7 +3,6 @@ package platform_repository
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/LeandroVCastro/applying-manager-api/internal/configs"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
@@ -11,9 +10,9 @@ import (
 )
 
 type PlatformRepositoryInterface interface {
-	GetById(id uint) *SelectNoRelations
+	GetById(id uint) *entity.Platform
 	CreateOrUpdate(id uint, name string, website *string) (savedId uint, err error)
-	ListAll() (platforms []*SelectNoRelations, err error)
+	ListAll() (platforms []*entity.Platform, err error)
 	Delete(id uint) error
 }
 
@@ -21,18 +20,8 @@ type PlatformRepository struct {
 	connection *gorm.DB
 }
 
-type SelectNoRelations struct {
-	ID        uint           `json:"id"`
-	Name      string         `json:"name"`
-	Website   *string        `json:"website"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at"`
-}
-
-func (repository PlatformRepository) ListAll() (listedPlatforms []*SelectNoRelations, err error) {
-	// result := repository.connection.Order("id ASC").Find(&listedPlatforms)
-	result := repository.connection.Table("platforms").Order("id ASC").Find(&listedPlatforms)
+func (repository PlatformRepository) ListAll() (listedPlatforms []*entity.Platform, err error) {
+	result := repository.connection.Select([]string{"id", "name", "website", "created_at", "updated_at"}).Order("id ASC").Find(&listedPlatforms)
 	if result.Error != nil {
 		err = errors.New(result.Error.Error())
 		return
@@ -40,9 +29,9 @@ func (repository PlatformRepository) ListAll() (listedPlatforms []*SelectNoRelat
 	return
 }
 
-func (repository PlatformRepository) GetById(id uint) *SelectNoRelations {
-	var platform = SelectNoRelations{}
-	result := repository.connection.First(&platform, id)
+func (repository PlatformRepository) GetById(id uint) *entity.Platform {
+	var platform = entity.Platform{}
+	result := repository.connection.Select([]string{"id", "name", "website", "created_at", "updated_at"}).First(&platform, id)
 	if result.Error != nil {
 		return nil
 	}

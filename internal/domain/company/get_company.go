@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	company_repository "github.com/LeandroVCastro/applying-manager-api/internal/repository/company"
 )
 
@@ -11,7 +12,7 @@ type GetCompany struct {
 	CompanyRepository company_repository.CompanyRepositoryInterface
 }
 
-func (c GetCompany) Handle(id uint) (company *company_repository.SelectNoRelations, errStatus int, err error) {
+func (c GetCompany) Handle(id uint) (company *entity.Company, errStatus int, err error) {
 	if id == 0 {
 		err = errors.New("should be provided an ID")
 		errStatus = 400
