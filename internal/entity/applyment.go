@@ -11,9 +11,9 @@ type Applyment struct {
 	Title       string         `gorm:"not null" json:"title"`
 	Description *string        `json:"description,omitempty"`
 	Link        *string        `json:"link,omitempty"`
-	CompanyID   *int           `json:"company_id,omitempty"`
+	CompanyId   *uint          `json:"company_id,omitempty"`
 	Company     *Company       `json:"company,omitempty"`
-	PlatformId  *int           `json:"platform_id,omitempty"`
+	PlatformId  *uint          `json:"platform_id,omitempty" gorm:"default:null"`
 	Platform    *Platform      `json:"platform,omitempty"`
 	AppliedAt   *time.Time     `json:"applied_at,omitempty"`
 	CreatedAt   *time.Time     `json:"created_at,omitempty"`

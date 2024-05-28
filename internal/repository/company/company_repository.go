@@ -59,23 +59,44 @@ func (repository CompanyRepository) CreateOrUpdate(
 	companyParams := entity.Company{Name: name}
 	if *description != "" {
 		companyParams.Description = description
+	} else {
+		companyParams.Description = nil
 	}
+
 	if *website != "" {
 		companyParams.Website = website
+	} else {
+		companyParams.Website = nil
 	}
+
 	if *linkedin != "" {
 		companyParams.Linkedin = linkedin
+	} else {
+		companyParams.Linkedin = nil
 	}
+
 	if *glassdoor != "" {
 		companyParams.Glassdoor = glassdoor
+	} else {
+		companyParams.Glassdoor = nil
 	}
+
 	if *instagram != "" {
 		companyParams.Instagram = instagram
+	} else {
+		companyParams.Instagram = nil
 	}
+
 	var result *gorm.DB
 	if id != 0 {
 		companyParams.ID = id
-		result = repository.connection.Updates(&companyParams)
+		result = repository.connection.Model(companyParams).
+			Update("name", companyParams.Name).
+			Update("description", companyParams.Description).
+			Update("website", companyParams.Website).
+			Update("linkedin", companyParams.Linkedin).
+			Update("glassdoor", companyParams.Glassdoor).
+			Update("instagram", companyParams.Instagram)
 	} else {
 		result = repository.connection.Create(&companyParams)
 	}

@@ -27,7 +27,9 @@ func RunApi() *mux.Router {
 
 	// Applyment routes
 	applymentRoutes := muxRouter.PathPrefix("/applyment").Subrouter()
-	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.GetApplyment)).Methods("GET")
+	applymentRoutes.HandleFunc("", middleware.DbTransactions(applyment_application.SaveApplyment)).Methods("POST")
 	applymentRoutes.HandleFunc("", middleware.DbTransactions(applyment_application.ListApplyments)).Methods("GET")
+	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.GetApplyment)).Methods("GET")
+	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.DeleteApplyment)).Methods("DELETE")
 	return muxRouter
 }
