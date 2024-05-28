@@ -11,6 +11,7 @@ import (
 type ApplymentRepositoryInterface interface {
 	GetById(id uint) *entity.Applyment
 	ListAll() (applyments []*entity.Applyment, err error)
+	Delete(id uint) error
 }
 
 type ApplymentRepository struct {
@@ -33,6 +34,16 @@ func (repository ApplymentRepository) GetById(id uint) *entity.Applyment {
 		return nil
 	}
 	return &applyment
+}
+
+func (repository ApplymentRepository) Delete(id uint) error {
+	var applyment = entity.Applyment{}
+	result := repository.connection.Where("ID = ?", id).Delete(&applyment)
+	if result.Error != nil {
+		err := errors.New(result.Error.Error())
+		return err
+	}
+	return nil
 }
 
 func ApplymentRepositoryFactory() ApplymentRepository {

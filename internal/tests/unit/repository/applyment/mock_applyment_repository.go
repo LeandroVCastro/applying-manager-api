@@ -18,3 +18,8 @@ func (m *MockApplymentRepository) ListAll() (applyments []*entity.Applyment, err
 	args := m.Called()
 	return args.Get(0).([]*entity.Applyment), args.Error(1)
 }
+
+func (m *MockApplymentRepository) Delete(id uint) error {
+	args := m.Called(id)
+	return args.Error(0)
+}

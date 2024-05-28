@@ -9,8 +9,8 @@ type ListApplyments struct {
 	ApplymentRepository applyment_repository.ApplymentRepositoryInterface
 }
 
-func (c ListApplyments) Handle() (applyments []*entity.Applyment, errStatus int, err error) {
-	applyments, err = c.ApplymentRepository.ListAll()
+func (a ListApplyments) Handle() (applyments []*entity.Applyment, errStatus int, err error) {
+	applyments, err = a.ApplymentRepository.ListAll()
 	if err != nil {
 		errStatus = 400
 	}

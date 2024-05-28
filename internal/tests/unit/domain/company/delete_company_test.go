@@ -46,7 +46,7 @@ func TestDeleteCompanyDomain(t *testing.T) {
 		mockCompanyRepository.AssertNumberOfCalls(t, "GetById", 1)
 	})
 
-	t.Run("Should return error 500 when something went to Delete repository method", func(t *testing.T) {
+	t.Run("Should return error 500 when something went wrong to Delete repository method", func(t *testing.T) {
 		mockCompanyRepository := new(company_repository_unit_test.MockCompanyRepository)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		mockCompanyRepository.On("Delete", uint(1)).Return(errors.New("error"))
