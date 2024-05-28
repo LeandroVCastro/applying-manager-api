@@ -11,12 +11,9 @@ import (
 )
 
 func TestGetPlatformDomain(t *testing.T) {
-	// var website string = "testewebsite"
 	var expectedApplyment = &entity.Applyment{
 		ID:    1,
 		Title: "Test applyment",
-		// Name:    "Platform test name",
-		// Website: &website,
 	}
 
 	t.Run("Should return error 400 when ID is not provided", func(t *testing.T) {

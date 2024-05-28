@@ -13,3 +13,8 @@ func (m *MockApplymentRepository) GetById(id uint) *entity.Applyment {
 	args := m.Called(id)
 	return args.Get(0).(*entity.Applyment)
 }
+
+func (m *MockApplymentRepository) ListAll() (applyments []*entity.Applyment, err error) {
+	args := m.Called()
+	return args.Get(0).([]*entity.Applyment), args.Error(1)
+}

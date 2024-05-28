@@ -1,6 +1,8 @@
 package applyment_repository
 
 import (
+	"errors"
+
 	"github.com/LeandroVCastro/applying-manager-api/internal/configs"
 	"github.com/LeandroVCastro/applying-manager-api/internal/entity"
 	"gorm.io/gorm"
@@ -8,10 +10,20 @@ import (
 
 type ApplymentRepositoryInterface interface {
 	GetById(id uint) *entity.Applyment
+	ListAll() (applyments []*entity.Applyment, err error)
 }
 
 type ApplymentRepository struct {
 	connection *gorm.DB
+}
+
+func (repository ApplymentRepository) ListAll() (applyments []*entity.Applyment, err error) {
+	result := repository.connection.Select([]string{"id", "title", "description", "link", "company_id", "platform_id", "applied_at", "created_at", "updated_at"}).Order("id DESC").Find(&applyments)
+	if result.Error != nil {
+		err = errors.New(result.Error.Error())
+		return
+	}
+	return
 }
 
 func (repository ApplymentRepository) GetById(id uint) *entity.Applyment {
