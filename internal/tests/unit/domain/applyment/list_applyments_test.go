@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListCompaniesDomain(t *testing.T) {
+func TestListApplymentsDomain(t *testing.T) {
 	t.Run("Should return exactly what repository returns", func(t *testing.T) {
 		mockApplymentRepository := new(applyment_repository_unit_test.MockApplymentRepository)
 		expectedApplyments := []*entity.Applyment{}
