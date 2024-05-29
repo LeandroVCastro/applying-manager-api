@@ -42,17 +42,38 @@ func TestSaveApplymentDomain(t *testing.T) {
 	var description string = "teste"
 	var link string = "testewebsite"
 
-	var platform_id uint = 1
 	var applied_at time.Time
 	var expectedApplyment = &entity.Applyment{
 		ID:    1,
 		Title: "Applyment test name",
 	}
+	t.Run("Should return error 404 when platform is not found", func(t *testing.T) {
+		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
+		var expectedPlatform *entity.Platform
+		var company_id uint
+		var platform_id uint = 1
+		mockPlatformRepository.On("GetById", uint(1)).Return(expectedPlatform)
+		domain := getDomain(mockApplymentRepository, mockCompanyRepository, mockPlatformRepository)
+		createdApplyment, errStatus, err := domain.Handle(
+			1,
+			"name teste",
+			&description,
+			&link,
+			&company_id,
+			&platform_id,
+			&applied_at,
+		)
+		assert.Nil(t, createdApplyment)
+		assert.Equal(t, 404, errStatus)
+		assert.Error(t, err)
+		assert.Equal(t, "platform not found", err.Error())
+	})
+
 	t.Run("Should return error 404 when company is not found", func(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		var expectedCompany *entity.Company
 		var company_id uint = 1
-		company_id = 1
+		var platform_id uint
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
 		domain := getDomain(mockApplymentRepository, mockCompanyRepository, mockPlatformRepository)
 		createdApplyment, errStatus, err := domain.Handle(
@@ -74,6 +95,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		var expectedApplyment *entity.Applyment
 		var company_id uint
+		var platform_id uint
 		mockApplymentRepository.On("GetById", uint(1)).Return(expectedApplyment)
 		domain := getDomain(mockApplymentRepository, mockCompanyRepository, mockPlatformRepository)
 		createdApplyment, errStatus, err := domain.Handle(1, "name teste", &description, &link, &company_id, &platform_id, &applied_at)
@@ -87,6 +109,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		mockApplymentRepository.On("GetById", uint(1)).Return(expectedApplyment)
 		var company_id uint
+		var platform_id uint
 		mockApplymentRepository.On(
 			"CreateOrUpdate",
 			uint(1),
@@ -118,6 +141,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		mockApplymentRepository.On("GetById", uint(1)).Return(expectedApplyment)
 		var company_id uint
+		var platform_id uint
 		mockApplymentRepository.On(
 			"CreateOrUpdate",
 			uint(1),
@@ -147,6 +171,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 	t.Run("Should return applyment created when ID passed is equal zero", func(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		var company_id uint
+		var platform_id uint
 		mockApplymentRepository.On(
 			"CreateOrUpdate",
 			uint(0),
@@ -179,9 +204,14 @@ func TestSaveApplymentDomain(t *testing.T) {
 	t.Run("Should return applyment created when ID passed is equal zero and get company too", func(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		var company_id uint = 1
+		var platform_id uint = 1
 		var expectedCompany = &entity.Company{
 			ID:   1,
 			Name: "Company test",
+		}
+		var expectedPlatform = &entity.Platform{
+			ID:   1,
+			Name: "Platform test",
 		}
 		mockApplymentRepository.On(
 			"CreateOrUpdate",
@@ -195,6 +225,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 		).Return(1, nil)
 		mockApplymentRepository.On("GetById", uint(1)).Return(expectedApplyment)
 		mockCompanyRepository.On("GetById", uint(1)).Return(expectedCompany)
+		mockPlatformRepository.On("GetById", uint(1)).Return(expectedPlatform)
 		domain := getDomain(mockApplymentRepository, mockCompanyRepository, mockPlatformRepository)
 		createdApplyment, errStatus, err := domain.Handle(
 			0,
@@ -216,6 +247,7 @@ func TestSaveApplymentDomain(t *testing.T) {
 	t.Run("Should return error 400 when Create fails", func(t *testing.T) {
 		mockApplymentRepository, mockCompanyRepository, mockPlatformRepository := getMocks()
 		var company_id uint
+		var platform_id uint
 		mockApplymentRepository.On(
 			"CreateOrUpdate",
 			uint(0),

@@ -25,17 +25,19 @@ func (a SaveApplyment) Handle(
 	platform_id *uint,
 	applied_at *time.Time,
 ) (savedApplyment *entity.Applyment, errStatus int, err error) {
-	if *company_id != 0 {
-		company := a.CompanyRepository.GetById(*company_id)
-		if company == nil {
-			err = errors.New("company not found")
-			errStatus = 404
-			return
-		}
+	err = a.getCompany(company_id)
+	if err != nil {
+		errStatus = 404
+		return
+	}
+	err = a.getPlatform(platform_id)
+	if err != nil {
+		errStatus = 404
+		return
 	}
 	if id != 0 {
-		if applyment := a.ApplymentRepository.GetById(id); applyment == nil {
-			err = errors.New("applyment not found")
+		err = a.getApplyment(id)
+		if err != nil {
 			errStatus = 404
 			return
 		}
@@ -64,4 +66,32 @@ func SaveApplymentFactory() SaveApplyment {
 		CompanyRepository:   company_repository.CompanyRepositoryFactory(),
 		PlatformRepository:  platform_repository.PlatformRepositoryFactory(),
 	}
+}
+
+func (a SaveApplyment) getApplyment(id uint) error {
+	applyment := a.ApplymentRepository.GetById(id)
+	if applyment == nil {
+		return errors.New("applyment not found")
+	}
+	return nil
+}
+
+func (a SaveApplyment) getCompany(id *uint) error {
+	if *id != 0 {
+		company := a.CompanyRepository.GetById(*id)
+		if company == nil {
+			return errors.New("company not found")
+		}
+	}
+	return nil
+}
+
+func (a SaveApplyment) getPlatform(id *uint) error {
+	if *id != 0 {
+		platform := a.PlatformRepository.GetById(*id)
+		if platform == nil {
+			return errors.New("platform not found")
+		}
+	}
+	return nil
 }
