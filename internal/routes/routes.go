@@ -4,6 +4,7 @@ import (
 	applyment_application "github.com/LeandroVCastro/applying-manager-api/internal/application/applyment"
 	company_application "github.com/LeandroVCastro/applying-manager-api/internal/application/company"
 	platform_application "github.com/LeandroVCastro/applying-manager-api/internal/application/platform"
+	stage_application "github.com/LeandroVCastro/applying-manager-api/internal/application/stage"
 	"github.com/LeandroVCastro/applying-manager-api/internal/routes/middleware"
 	"github.com/gorilla/mux"
 )
@@ -31,5 +32,9 @@ func RunApi() *mux.Router {
 	applymentRoutes.HandleFunc("", middleware.DbTransactions(applyment_application.ListApplyments)).Methods("GET")
 	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.GetApplyment)).Methods("GET")
 	applymentRoutes.HandleFunc("/{id}", middleware.DbTransactions(applyment_application.DeleteApplyment)).Methods("DELETE")
+
+	stageRoutes := muxRouter.PathPrefix("/stage").Subrouter()
+	stageRoutes.HandleFunc("", middleware.DbTransactions(stage_application.ListStages)).Methods("GET")
+
 	return muxRouter
 }

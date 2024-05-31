@@ -15,6 +15,8 @@ type Applyment struct {
 	Company     *Company       `json:"company,omitempty"`
 	PlatformId  *uint          `json:"platform_id,omitempty" gorm:"default:null"`
 	Platform    *Platform      `json:"platform,omitempty"`
+	StageId     *uint          `json:"stage_id,omitempty" gorm:"default:null"`
+	Stage       *Stage         `json:"stage,omitempty"`
 	AppliedAt   *time.Time     `json:"applied_at,omitempty"`
 	CreatedAt   *time.Time     `json:"created_at,omitempty"`
 	UpdatedAt   *time.Time     `json:"updated_at,omitempty"`
